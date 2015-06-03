@@ -1,1 +1,6 @@
 <h1><%= @group.name %></h1>
+<ul>
+  <% @group.group_friends.each do |friend| %>
+    <li><%= friend.name %>: <%= friend.phone %></li>
+  <% end %>
+</ul>
