@@ -18,10 +18,15 @@ class GroupsController < ApplicationController
   end
 
   def edit
+    @group = Group.find(params[:id])
   end
 
   def update
+    @group = Group.find(params[:id])
+    @group.update(group_params) 
+    redirect_to groups_path
   end
+
 
   def destroy
     @group = Group.find(params[:id])
@@ -32,6 +37,6 @@ class GroupsController < ApplicationController
   private
 
   def group_params
-     params.require(:group).permit(:name, :user_id, :friend_ids)
+     params.require(:group).permit(:name, :user_id, friend_ids: [])
   end
 end
