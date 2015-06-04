@@ -1,0 +1,10 @@
+<h1>My Account</h1>
+
+<%= link_to "Create Group", new_group_path, class: "btn btn-default" %>
+<%= link_to "Create Friend", new_friend_path, class: "btn btn-default" %>
+
+<h3>My Groups</h3>
+<%= render "groups/groups" %>
+
+<h3>My Friends</h3>
+<%= render "friends/friends" %>
