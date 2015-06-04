@@ -6,9 +6,13 @@ Rails.application.routes.draw do
 
   devise_for :users
 
-  root "users#index"
+  root "user#index"
 
-  resources :user, only: [:index, :show] 
+  resources :user, only: [:index, :show]
+
+  post 'notifications/desktop_send/:id' => 'notifications#desktop_send', as: 'notifications_desktop_send'
+  post 'notifications/incoming' => 'notifications#incoming'
+  get 'notifications/incoming' => 'notifications#incoming'
 
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".

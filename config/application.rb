@@ -15,6 +15,15 @@ require "sprockets/railtie"
 # you've limited to :test, :development, or :production.
 Bundler.require(*Rails.groups)
 
+Dotenv::Railtie.load
+
+twilio_auth_token = ENV['TWILIO_AUTH_TOKEN']
+twilio_account_sid = ENV['TWILIO_ACCOUNT_SID']
+chad_phone = ENV['CHAD_PHONE']
+ian_phone = ENV['IAN_PHONE']
+julian_phone = ENV['JULIAN_PHONE']
+findlay_phone = ENV['FINDLAY_PHONE']
+
 module TextigoApp
   class Application < Rails::Application
     # Settings in config/environments/* take precedence over those specified here.
