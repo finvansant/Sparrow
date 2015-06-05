@@ -4,9 +4,9 @@ Rails.application.routes.draw do
 
   resources :friends
 
-  devise_for :users
+  devise_for :users, :controllers => {registrations: 'registrations'}
 
-  root "user#index"
+  root 'user#index'
 
   resources :user, only: [:index, :show]
 
