@@ -4,20 +4,21 @@ class NotificationsController < ApplicationController
   skip_before_action :verify_authenticity_token
   @@all_responses = []
 
+ 
   def index
-  end
+  end 
 
   def notify
     client = Twilio::REST::Client.new ENV['TWILIO_ACCOUNT_SID'], ENV['TWILIO_AUTH_TOKEN']
-    message = client.messages.create from: ENV['TEXTIGO_PHONE'], to: ENV['CHAD_PHONE'], body: 'Learning to send SMS you are.', status_callback: 'https://ba74edc7.ngrok.io/twilio/status'
-
+    message = client.messages.create from: '13238798398', to: ENV['CHAD_PHONE'], body: 'Learning to send SMS you are.', status_callback: 'https://ba74edc7.ngrok.io/twilio/status'
+    
     render plain: message.status
 
   end
 
   def desktop_send
     client = Twilio::REST::Client.new ENV['TWILIO_ACCOUNT_SID'], ENV['TWILIO_AUTH_TOKEN']
-
+         
         from = ENV['TEXTIGO_PHONE'] # Your Twilio number
         select_friends = Group.find(params[:id]).friends
         select_friends.each do |friend|
@@ -28,11 +29,15 @@ class NotificationsController < ApplicationController
           )
         end
     redirect_to root_url
-  end
+  end 
 
-# you can send a text to a group, by iterating over a hash
+# you can send a text to a group, by iterating over a hash 
+
+
+
 
   def incoming
+    
     # Grab the phone number from incoming Twilio params
     @from_number  = params[:From]
 
@@ -44,36 +49,35 @@ class NotificationsController < ApplicationController
 
     @body         = params[:Body]
     message_array = @body.split
-    @group = @user.groups.find_by(name: message_array[0])
+    @group = @user.groups.find_by(name: message_array[0] )
+    if session["counter"] == 1
+           twiml = Twilio::TwiML::Response.new do |r|
+              r.Message "i got a reply session"
+            end
+            session["counter"] += 1
+            twiml.text
+    end
+
     if @group
 
         message_body = message_array[1..-1].join(' ')
 
         client = Twilio::REST::Client.new ENV['TWILIO_ACCOUNT_SID'], ENV['TWILIO_AUTH_TOKEN']
-
+                 
         from = ENV['TEXTIGO_PHONE'] # Your Twilio number
         select_friends = @group.friends
         select_friends.each do |friend|
-        client.account.messages.create(
+          client.account.messages.create(
                     :from => from,
                     :to => friend.phone,
                     :body => "hey #{friend.name}, #{message_body}"
                     )
+          session["counter"] ||= 1
+          session["stage_reply"] = "invited"
         end
         redirect_to root_url
 
-    end
-
-    # output = @body
-    # @@all_responses << @body
-    # @@all_responses << @from_number
-    # @@all_responses << @number_name
-
-    # @responses = @@all_responses
-    # Render the TwiML response
-    # respond(output)
-
-    # render 'index'
+    end 
   end
 
   def respond(message)
@@ -83,4 +87,22 @@ class NotificationsController < ApplicationController
       render text: response.text
   end
 
+
+  def counter_nsa
+
+    session["counter"] ||= 0
+    sms_count = session["counter"]
+    if sms_count == 0
+      message = "Hello, thanks for the new message."
+    else
+      message = "Hello, thanks for message number #{sms_count + 1}"
+    end
+      twiml = Twilio::TwiML::Response.new do |r|
+        r.Message message
+      end
+    session["counter"] += 1
+    render_twiml twiml   
+  end 
+
+ 
 end

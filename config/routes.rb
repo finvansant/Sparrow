@@ -12,7 +12,7 @@ Rails.application.routes.draw do
 
   post 'notifications/desktop_send/:id' => 'notifications#desktop_send', as: 'notifications_desktop_send'
   post 'notifications/incoming' => 'notifications#incoming'
-  # get 'notifications/incoming' => 'notifications#incoming'
+  get 'notifications/incoming' => 'notifications#incoming'
 
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
