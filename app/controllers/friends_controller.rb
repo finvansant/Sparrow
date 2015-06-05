@@ -13,7 +13,11 @@ class FriendsController < ApplicationController
 
   def create
     @friend = Friend.create(friend_params)
-    redirect_to friends_path
+    if @friend.save
+      redirect_to friends_path
+    else
+      render "new"
+    end
   end
 
   def edit
