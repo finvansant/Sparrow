@@ -4,21 +4,20 @@ class NotificationsController < ApplicationController
   skip_before_action :verify_authenticity_token
   @@all_responses = []
 
- 
   def index
-  end 
+  end
 
   def notify
     client = Twilio::REST::Client.new ENV['TWILIO_ACCOUNT_SID'], ENV['TWILIO_AUTH_TOKEN']
-    message = client.messages.create from: '13238798398', to: ENV['CHAD_PHONE'], body: 'Learning to send SMS you are.', status_callback: 'https://ba74edc7.ngrok.io/twilio/status'
-    
+    message = client.messages.create from: ENV['TEXTIGO_PHONE'], to: ENV['CHAD_PHONE'], body: 'Learning to send SMS you are.', status_callback: 'https://ba74edc7.ngrok.io/twilio/status'
+
     render plain: message.status
 
   end
 
   def desktop_send
     client = Twilio::REST::Client.new ENV['TWILIO_ACCOUNT_SID'], ENV['TWILIO_AUTH_TOKEN']
-         
+
         from = ENV['TEXTIGO_PHONE'] # Your Twilio number
         select_friends = Group.find(params[:id]).friends
         select_friends.each do |friend|
@@ -29,12 +28,9 @@ class NotificationsController < ApplicationController
           )
         end
     redirect_to root_url
-  end 
+  end
 
-# you can send a text to a group, by iterating over a hash 
-
-
-
+# you can send a text to a group, by iterating over a hash
 
   def incoming
     # Grab the phone number from incoming Twilio params
@@ -48,13 +44,13 @@ class NotificationsController < ApplicationController
 
     @body         = params[:Body]
     message_array = @body.split
-    @group = @user.groups.find_by(name: message_array[0] )
+    @group = @user.groups.find_by(name: message_array[0])
     if @group
 
         message_body = message_array[1..-1].join(' ')
 
         client = Twilio::REST::Client.new ENV['TWILIO_ACCOUNT_SID'], ENV['TWILIO_AUTH_TOKEN']
-                 
+
         from = ENV['TEXTIGO_PHONE'] # Your Twilio number
         select_friends = @group.friends
         select_friends.each do |friend|
@@ -66,7 +62,7 @@ class NotificationsController < ApplicationController
         end
         redirect_to root_url
 
-    end 
+    end
 
     # output = @body
     # @@all_responses << @body
@@ -87,7 +83,4 @@ class NotificationsController < ApplicationController
       render text: response.text
   end
 
-
-
- 
 end
