@@ -75,6 +75,7 @@ class NotificationsController < ApplicationController
     @from_number  = params[:From]
     @guest = @event.guests.find_by(phone: @from_number)
     @guest.event_guest.reply = params[:Body]
+    @guest.event_guest.format_replies
     @event.check_replies
     if @event yes_tot > 0
       @event.guests.each do |guest|
