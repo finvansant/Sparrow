@@ -33,14 +33,22 @@ class NotificationsController < ApplicationController
 # you can send a text to a group, by iterating over a hash
 
   def incoming
+    # @event = Event.find(session["event"])
+    # if !@event
+    #   event_host
+    # elsif @event.active && session["counter"] == 1
+    #   event_reply
+    # end
+
+  end
+
+  def event_host  
     # Grab the phone number from incoming Twilio params
     @from_number  = params[:From]
 
     @user = User.find_by(phone: @from_number)
 
-    # Find the subscriber associated with this number or create a new one
-    # @new_subscriber = Subscriber.exists?(:phone_number => @phone_number) === false
-    # @subscriber = Subscriber.first_or_create(:phone_number => @phone_number)
+  
 
     @body         = params[:Body]
     message_array = @body.split
@@ -63,17 +71,9 @@ class NotificationsController < ApplicationController
         redirect_to root_url
 
     end
+  end
 
-    # output = @body
-    # @@all_responses << @body
-    # @@all_responses << @from_number
-    # @@all_responses << @number_name
-
-    # @responses = @@all_responses
-    # Render the TwiML response
-    # respond(output)
-
-    # render 'index'
+  def event_reply
   end
 
   def respond(message)
