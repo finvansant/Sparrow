@@ -4,9 +4,10 @@ class Event < ActiveRecord::Base
   has_many :invitations
   has_many :friends, through: :invitations
 
-  def all_active
+  def self.all_active
     Event.all.where(status: 'active')
   end 
+
 
   # def invited 
   #   invited_array = []

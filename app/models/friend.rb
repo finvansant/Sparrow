@@ -24,4 +24,10 @@ class Friend < ActiveRecord::Base
     # if 10 characters, prepend "+1"
   end
 
+  def self.get_id_from_number(number)
+    friend = self.find_by(phone: number)
+    friend.id 
+  end 
+
+
 end
