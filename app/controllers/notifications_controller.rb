@@ -2,7 +2,6 @@
 class NotificationsController < ApplicationController
   include Webhookable
   skip_before_action :verify_authenticity_token
-  @@all_responses = []
 
   def index
   end
@@ -10,9 +9,7 @@ class NotificationsController < ApplicationController
   def notify
     client = Twilio::REST::Client.new ENV['TWILIO_ACCOUNT_SID'], ENV['TWILIO_AUTH_TOKEN']
     message = client.messages.create from: ENV['TEXTIGO_PHONE'], to: ENV['CHAD_PHONE'], body: 'Learning to send SMS you are.', status_callback: 'https://ba74edc7.ngrok.io/twilio/status'
-
     render plain: message.status
-
   end
 
   def desktop_send
@@ -26,7 +23,7 @@ class NotificationsController < ApplicationController
             :to => friend.phone,
             :body => "Hey #{friend.name}, Hackattack at 6PM. Bring Computer!"
           )
-        end
+    end
     # Need to add Event.create here (also need to add a form field for event create)
     # Event.create(name: @message_body, host: @user.id, guests: {}, status: 'active')
 
@@ -53,13 +50,17 @@ class NotificationsController < ApplicationController
       @user = User.find_by(phone: @phone_number)
       @group = @user.groups.find_by(name: message_array[0])
       if @group
-        @invited_array = []
+
+
+
         session['person_type'] = 'host'
         @message_body = message_array[1..-1].join(' ')
         @select_friends = @group.friends
-        @select_friends.each { |friend| @invited_array << friend.phone }
+    
         output = "Message sent to '#{message_array[0]}' group."
-        event = Event.create(name: @message_body, host: @user.id, responses: {}, invited: @invited_array, status: 'active')
+        event = Event.create(name: @message_body, host: @user.id, status: 'active')
+        @select_friends.each { |friend| Invitation.create(friend_id: friend.id, event_id: event.id)}
+
         send_group(@message_body, @select_friends)
       else 
         output = "#{message_array[0]} is not a group. please make one"
@@ -69,8 +70,8 @@ class NotificationsController < ApplicationController
       # user's phone doesn't exist in our DB (this will have to change)
       # user's phone is matches to an event that has a status of active
       # if Event.all_active includes our current number...  
-
-      if Event.all_active.include?(@phone_number)
+binding.pry
+      if Event.all.include?(@phone_number)
           session['person_type'] = 'guest'
           output = process_guest(@body, @phone_number, sms_count)
       else

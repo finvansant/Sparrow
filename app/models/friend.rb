@@ -5,6 +5,8 @@ class Friend < ActiveRecord::Base
   belongs_to :user
     has_many :group_friends
   has_many :groups, through: :group_friends
+  has_many :invitations
+  has_many :events, through: :invitations
 
   def normalize_phone
     # get phone number
