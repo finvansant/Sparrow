@@ -32,6 +32,8 @@ class NotificationsController < ApplicationController
 
  # Receive incoming SMS
   def incoming
+    in_array = ['in', 'i', 'y', 'yes']
+    out_array = ['out', 'o', 'n', 'no']
     # Grab the phone number from incoming Twilio params
     @phone_number = params[:From]
     # set session counter to zero if it doesn't exist.  
@@ -42,8 +44,25 @@ class NotificationsController < ApplicationController
     @body = params[:Body].downcase
     message_array = @body.split
 
+           # user's phone doesn't exist in our DB (this will have to change)
+      # user's phone is matches to an event that has a status of active
+      # if Event.all_active includes our current number...  
+      # get the friend ID of this number
+    if Friend.exists?(phone: @phone_number)  
+      friend_id = Friend.get_id_from_number(@phone_number)
+      active_events = Event.all_active
+      active_invites = active_events.select { |e| e.invitations.where(friend_id: friend_id) }
+      @active_invite = active_invites.last
+
+      @event_id = @active_invite.id
+      # will need to change this when friends are uniquely associated with a user. 
+      # see if this number is associated with an active invitation
+      if @active_invite
+          session['person_type'] = 'guest'
+          output = process_guest(@body, @phone_number, @event_id)
+      end
     # Is this user in our database
-    if User.exists?(phone: @phone_number)
+    elsif User.exists?(phone: @phone_number)
       #there is a user 
       #if there is a group that matches message[0], iterate and send invite 
       # set the session status to host. ie, we have a user and a group
@@ -62,26 +81,9 @@ class NotificationsController < ApplicationController
       else 
         output = "#{message_array[0]} is not a group. please make one"
       end 
+    
     else
-       
-      # user's phone doesn't exist in our DB (this will have to change)
-      # user's phone is matches to an event that has a status of active
-      # if Event.all_active includes our current number...  
-      # get the friend ID of this number
-      friend_id = Friend.get_id_from_number(@phone_number)
-      active_events = Event.all_active
-      active_invites = active_events.select { |e| e.invitations.where(friend_id: friend_id) }
-      @active_invite = active_invites.last
-
-      @event_id = @active_invite.id
-      # will need to change this when friends are uniquely associated with a user. 
-      # see if this number is associated with an active invitation
-      if @active_invite
-          session['person_type'] = 'guest'
-          output = process_guest(@body, @phone_number, @event_id)
-      else
-          output = "Hmm... Try creating a new event @ Textigo.com. No active invites or groups associated with this number."
-      end 
+      output = "Hmm... Try creating a new event @ Textigo.com. No active invites or groups associated with this number." 
     end
 
     # Render the TwiML response
@@ -163,7 +165,7 @@ class NotificationsController < ApplicationController
 
       host = User.find(host_id)
 
-        @twilio_number = ENV['TWILIO_NUMBER']
+        @twilio_number = ENV['TEXTIGO_PHONE']
         @client = Twilio::REST::Client.new ENV['TWILIO_ACCOUNT_SID'], ENV['TWILIO_AUTH_TOKEN']
         message = @client.account.messages.create(
           :from => @twilio_number,
