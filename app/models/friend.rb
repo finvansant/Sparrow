@@ -5,6 +5,8 @@ class Friend < ActiveRecord::Base
   belongs_to :user
     has_many :group_friends
   has_many :groups, through: :group_friends
+  has_many :invitations
+  has_many :events, through: :invitations
 
   def normalize_phone
     # get phone number
@@ -21,5 +23,11 @@ class Friend < ActiveRecord::Base
     # check that length is 10
     # if 10 characters, prepend "+1"
   end
+
+  def self.get_id_from_number(number)
+    friend = self.find_by(phone: number)
+    friend.id 
+  end 
+
 
 end
