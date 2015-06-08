@@ -15,7 +15,7 @@ require "sprockets/railtie"
 # you've limited to :test, :development, or :production.
 Bundler.require(*Rails.groups)
 
-Dotenv::Railtie.load
+# Dotenv::Railtie.load
 
 twilio_auth_token = ENV['TWILIO_AUTH_TOKEN']
 twilio_account_sid = ENV['TWILIO_ACCOUNT_SID']
