@@ -32,9 +32,8 @@ class NotificationsController < ApplicationController
     message_array = @body.split
 
     if Friend.exists?(phone: @phone_number)  
-      friend_ids = Friend.get_id_from_number(@phone_number)
-      @active_invite = Event.last_active_invite(friend_id)
-      # picks last of active_invites array
+      friend_ids = Friend.get_all_ids_from_number(@phone_number)
+      @active_invite = Event.find_matching_invitation(friend_ids)
       @event_id = @active_invite.id
 
       if @active_invite
@@ -107,7 +106,11 @@ class NotificationsController < ApplicationController
           active_event.increment_yes_total
           host_message = "New RSVP from #{name}. Yes: #{active_event.yes_total} No: #{active_event.no_total}"
           send_host(host_message, active_event.host)
-        
+          if active_event.close_event?
+            host_message = "Invitation filled. Total attending: "
+            send_host(host_message, active_event.host)
+          end
+
         elsif out_array.include?(message_array[0])
           output = "Sorry to miss you #{name}. Maybe next time."
           active_event = Event.find(@event_id)

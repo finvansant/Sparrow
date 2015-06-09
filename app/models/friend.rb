@@ -34,9 +34,9 @@ class Friend < ActiveRecord::Base
     friends.map { |friend| friend.id }
   end 
 
-  def self.say_hello
-    puts "hello"
-  end
+ 
+
+
 
 
 
