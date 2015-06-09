@@ -33,12 +33,14 @@ class NotificationsController < ApplicationController
 
     if Friend.exists?(phone: @phone_number)  
       friend_ids = Friend.get_all_ids_from_number(@phone_number)
-      @active_invite = Event.find_matching_invitation(friend_ids)
-      @event_id = @active_invite.id
+      @active_invite = Invitation.find_matching_invitation(friend_ids).first.last
+      # WTF did we just do?!
+      @friend_id = @active_invite.friend_id 
+      @event_id = @active_invite.event_id
 
       if @active_invite
           session['person_type'] = 'guest'
-          output = process_guest(@body, @phone_number, @event_id)
+          output = process_guest(@body, @phone_number, @active_invite)
       end
    
     elsif User.exists?(phone: @phone_number)
@@ -53,7 +55,7 @@ class NotificationsController < ApplicationController
         event = Event.create(name: @message_body, host: @user.id, status: 'active')
         @select_friends.each { |friend| Invitation.create(friend_id: friend.id, event_id: event.id)}
 
-        send_group(@message_body, @select_friends)
+        send_group(@message_body, @select_friends, @user.name)
       else 
         output = "#{message_array[0]} is not a group. please make one"
       end 
@@ -75,7 +77,7 @@ class NotificationsController < ApplicationController
       render text: response.text
   end
 
-  def send_group(msg, select_friends)
+  def send_group(msg, select_friends, host_name)
     @client = Twilio::REST::Client.new ENV['TWILIO_ACCOUNT_SID'], ENV['TWILIO_AUTH_TOKEN']
 
     from = ENV['TEXTIGO_PHONE']
@@ -83,14 +85,14 @@ class NotificationsController < ApplicationController
         @client.account.messages.create(
                     :from => from,
                     :to => friend.phone,
-                    :body => "hey #{friend.name}, #{msg}, [In] or [Out]?"
+                    :body => "From #{host_name}:\nHey #{friend.name}, #{msg}, [In] or [Out]?"
                     )
         end
   end
 
   private
 
-    def process_guest(message, phone, event_id)
+    def process_guest(message, phone, active_invite)
 
       in_array = ['in', 'i', 'y', 'yes']
       out_array = ['out', 'o', 'n', 'no']
@@ -101,21 +103,28 @@ class NotificationsController < ApplicationController
 
       if in_array.include?(message_array[0])
           # change it in the Event model? 
+         active_invite.reply = 'yes'
+         active_invite.save
           output = "Glad you can make it, #{name}. See you there."
           active_event = Event.find(@event_id)
           active_event.increment_yes_total
-          host_message = "New RSVP from #{name}. Yes: #{active_event.yes_total} No: #{active_event.no_total}"
+          host_message = "New Yes RSVP from #{name}. Yes: #{active_event.yes_total} No: #{active_event.no_total}"
           send_host(host_message, active_event.host)
           if active_event.close_event?
-            host_message = "Invitation filled. Total attending: "
+            names = active_event.attendee_names
+
+            host_message = "Invitation filled. Total attending: #{active_event.total_invited}. Attendees: #{names.join(', ')}"
             send_host(host_message, active_event.host)
           end
 
         elsif out_array.include?(message_array[0])
+          current_invite = Invitation.find_by(friend_id: friend_id, event_id: event_id)
+          current_invite.reply = 'no'
+          current_invite.save
           output = "Sorry to miss you #{name}. Maybe next time."
           active_event = Event.find(@event_id)
           active_event.increment_no_total
-          host_message = "New RSVP from #{name}. Yes: #{active_event.yes_total} No: #{active_event.no_total}"
+          host_message = "New No RSVP from #{name}. Yes: #{active_event.yes_total} No: #{active_event.no_total}"
           send_host(host_message, active_event.host)
 
         else

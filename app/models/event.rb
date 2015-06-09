@@ -29,11 +29,19 @@ class Event < ActiveRecord::Base
     active_invites.last
   end
 
-  def self.find_matching_invitation(friend_ids)
+
+  # def self.find_matching_invitation(friend_ids)
+  #   all_active_events = self.all_active
+  #   friends = friend_ids.map {|friend_id| Friend.find(friend_id)}
+  #   friends.map { |friend|  all_active_events.find_by(host: friend.user_id) }.uniq.first
+  # end
+
+  def self.invitation_friend_id(friend_ids) 
     all_active_events = self.all_active
     friends = friend_ids.map {|friend_id| Friend.find(friend_id)}
-    friends.map { |friend|  all_active_events.find_by(host: friend.user_id) }.uniq.first
-  end
+    friend = friends.select { |friend|  all_active_events.find_by(host: friend.user_id) }.uniq.first
+    friend.id
+  end 
 
   def close_event?
     if self.yes_total >= self.total_invited
@@ -42,7 +50,12 @@ class Event < ActiveRecord::Base
     else
       return false
     end
+  end
 
+  def attendee_names
+    attendee_ids = []
+    self.invitations.each {|i| attendee_ids << i.friend_id if i.reply == 'yes'}
+    attendee_ids.map {|id| Friend.find(id).name }
   end
 
 end
