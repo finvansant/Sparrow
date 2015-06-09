@@ -1,3 +1,65 @@
 // Place all the styles related to the User controller here.
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
+
+body {
+  background-image: asset-data-url("floorboard.jpg");
+  background-repeat:no-repeat;
+  background-size:cover;
+}
+
+form#new_group {
+  margin-top: 10px;
+
+}
+
+form#new_friend {
+  margin-top: 10px;
+
+}
+
+#new_group_hidden { 
+  color: white;
+  margin: 10px 0 10px;
+  input[type=checkbox] {
+    margin-left: 10px;
+    margin-right: 5px;
+  }
+  input[type=submit] {
+    color: black; 
+  }
+}
+
+#new_friend_hidden {
+  color: white;
+  input[type=submit] {
+    color: black; 
+  }
+}
+
+h1#basecamp_title {
+  color: white;
+
+}
+
+h3#groups_title {
+  color: gray;
+}
+
+h3#friends_title {
+  color: gray;
+}
+
+
+#group_list {
+  color: white;
+
+}
+
+#friend_list {
+  color: white;
+}
+
+
+
+

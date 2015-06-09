@@ -1,4 +1,6 @@
 class FriendsController < ApplicationController
+  respond_to :html, :js
+  
   def index
     @friends = Friend.all
   end

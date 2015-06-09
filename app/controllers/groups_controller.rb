@@ -1,4 +1,5 @@
 class GroupsController < ApplicationController
+  respond_to :html, :js
 
   def index
     @groups = Group.all
@@ -31,7 +32,7 @@ class GroupsController < ApplicationController
   def destroy
     @group = Group.find(params[:id])
     @group.destroy
-    redirect_to groups_path
+    redirect_to user_path(current_user)
   end
 
   private

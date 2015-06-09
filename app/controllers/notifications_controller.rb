@@ -70,7 +70,7 @@ class NotificationsController < ApplicationController
       # user's phone doesn't exist in our DB (this will have to change)
       # user's phone is matches to an event that has a status of active
       # if Event.all_active includes our current number...  
-binding.pry
+# binding.pry
       if Event.all.include?(@phone_number)
           session['person_type'] = 'guest'
           output = process_guest(@body, @phone_number, sms_count)
