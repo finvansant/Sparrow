@@ -3,7 +3,7 @@ class Friend < ActiveRecord::Base
   before_save :normalize_phone
 
   belongs_to :user
-    has_many :group_friends
+  has_many :group_friends
   has_many :groups, through: :group_friends
   has_many :invitations
   has_many :events, through: :invitations
@@ -28,6 +28,17 @@ class Friend < ActiveRecord::Base
     friend = self.find_by(phone: number)
     friend.id 
   end 
+
+  def self.get_all_ids_from_number(number)
+    friends = self.all.select { |friend| friend.phone == number }
+    friends.map { |friend| friend.id }
+  end 
+
+  def self.say_hello
+    puts "hello"
+  end
+
+
 
 
 end

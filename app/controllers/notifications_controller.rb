@@ -6,22 +6,17 @@ class NotificationsController < ApplicationController
   def index
   end
 
-  def notify
-    client = Twilio::REST::Client.new ENV['TWILIO_ACCOUNT_SID'], ENV['TWILIO_AUTH_TOKEN']
-    message = client.messages.create from: ENV['TEXTIGO_PHONE'], to: ENV['CHAD_PHONE'], body: 'Learning to send SMS you are.', status_callback: 'https://ba74edc7.ngrok.io/twilio/status'
-    render plain: message.status
-  end
 
   def desktop_send
     client = Twilio::REST::Client.new ENV['TWILIO_ACCOUNT_SID'], ENV['TWILIO_AUTH_TOKEN']
 
-        from = ENV['TEXTIGO_PHONE'] # Your Twilio number
+        from = ENV['TEXTIGO_PHONE']
         select_friends = Group.find(params[:id]).friends
         select_friends.each do |friend|
           client.account.messages.create(
             :from => from,
             :to => friend.phone,
-            :body => "Hey #{friend.name}, Hackattack at 6PM. Bring Computer!"
+            :body => "Hey #{friend.name}, Hackattack at 6PM. Bring Computer!" # add form logic for this text body
           )
     end
     # Need to add Event.create here (also need to add a form field for event create)
@@ -30,42 +25,24 @@ class NotificationsController < ApplicationController
     redirect_to root_url
   end
 
- # Receive incoming SMS
+
   def incoming
-    in_array = ['in', 'i', 'y', 'yes']
-    out_array = ['out', 'o', 'n', 'no']
-    # Grab the phone number from incoming Twilio params
-    @phone_number = params[:From]
-    # set session counter to zero if it doesn't exist.  
-    session["counter"] ||= 0
-    sms_count = session["counter"]
-    sms_type = session['person_type']
-    
+    @phone_number = params[:From] 
     @body = params[:Body].downcase
     message_array = @body.split
 
-           # user's phone doesn't exist in our DB (this will have to change)
-      # user's phone is matches to an event that has a status of active
-      # if Event.all_active includes our current number...  
-      # get the friend ID of this number
     if Friend.exists?(phone: @phone_number)  
-      friend_id = Friend.get_id_from_number(@phone_number)
-      active_events = Event.all_active
-      active_invites = active_events.select { |e| e.invitations.where(friend_id: friend_id) }
-      @active_invite = active_invites.last
-
+      friend_ids = Friend.get_id_from_number(@phone_number)
+      @active_invite = Event.last_active_invite(friend_id)
+      # picks last of active_invites array
       @event_id = @active_invite.id
-      # will need to change this when friends are uniquely associated with a user. 
-      # see if this number is associated with an active invitation
+
       if @active_invite
           session['person_type'] = 'guest'
           output = process_guest(@body, @phone_number, @event_id)
       end
-    # Is this user in our database
+   
     elsif User.exists?(phone: @phone_number)
-      #there is a user 
-      #if there is a group that matches message[0], iterate and send invite 
-      # set the session status to host. ie, we have a user and a group
       @user = User.find_by(phone: @phone_number)
       @group = @user.groups.find_by(name: message_array[0])
       if @group
@@ -86,13 +63,11 @@ class NotificationsController < ApplicationController
       output = "Hmm... Try creating a new event @ Textigo.com. No active invites or groups associated with this number." 
     end
 
-    # Render the TwiML response
     respond(output)
     session["counter"] += 1
 
   end
 
-  # Helper method for sending an SMS response (to person who called)
   
   def respond(message)
       response = Twilio::TwiML::Response.new do |r|
@@ -104,7 +79,7 @@ class NotificationsController < ApplicationController
   def send_group(msg, select_friends)
     @client = Twilio::REST::Client.new ENV['TWILIO_ACCOUNT_SID'], ENV['TWILIO_AUTH_TOKEN']
 
-    from = ENV['TEXTIGO_PHONE'] # Your Twilio number
+    from = ENV['TEXTIGO_PHONE']
         select_friends.each do |friend|
         @client.account.messages.create(
                     :from => from,
@@ -116,7 +91,6 @@ class NotificationsController < ApplicationController
 
   private
 
-    # message logic in here for now 
     def process_guest(message, phone, event_id)
 
       in_array = ['in', 'i', 'y', 'yes']
@@ -130,22 +104,14 @@ class NotificationsController < ApplicationController
           # change it in the Event model? 
           output = "Glad you can make it, #{name}. See you there."
           active_event = Event.find(@event_id)
-          total = active_event.yes_total
-          total += 1 
-          active_event.yes_total = total 
-          active_event.save
+          active_event.increment_yes_total
           host_message = "New RSVP from #{name}. Yes: #{active_event.yes_total} No: #{active_event.no_total}"
           send_host(host_message, active_event.host)
-
-          # todo: update the response array in Event and yes_total += 1
         
         elsif out_array.include?(message_array[0])
           output = "Sorry to miss you #{name}. Maybe next time."
           active_event = Event.find(@event_id)
-          total = active_event.no_total
-          total += 1 
-          active_event.no_total = total
-          active_event.save
+          active_event.increment_no_total
           host_message = "New RSVP from #{name}. Yes: #{active_event.yes_total} No: #{active_event.no_total}"
           send_host(host_message, active_event.host)
 
