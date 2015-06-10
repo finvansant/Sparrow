@@ -1,6 +1,8 @@
 class FriendsController < ApplicationController
+  before_action :authenticate_user!
+
   def index
-    @friends = Friend.all
+    @friends = current_user.friends
   end
 
   def new
@@ -25,6 +27,9 @@ class FriendsController < ApplicationController
   end
 
   def update
+    @friend = Friend.find(params[:id])
+    @friend.update(friend_params) 
+    redirect_to friends_path
   end
 
   def destroy
