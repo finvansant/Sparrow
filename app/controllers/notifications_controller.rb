@@ -25,11 +25,11 @@ class NotificationsController < ApplicationController
       client.account.messages.create(
         :from => from,
         :to => friend.phone,
-        :body => "Hey #{friend.name},\n#{@message_body}" # add form logic for this text body
+        :body => "From #{current_user.name}:\nHey #{friend.name}, #{@message_body}, [In] or [Out]?" # add form logic for this text body
       )
     end
       
-    redirect_to root_url, notice: "Message sent to '#{@group}' group."
+    redirect_to root_url, notice: "Message sent to '#{@group.name.titleize}' group."
   end
 
 
@@ -85,7 +85,7 @@ class NotificationsController < ApplicationController
     # automated reply; lets user know whether their action succeeded or failed
     respond(output)
     # increment session counter so that we can keep track of replies (counts messages in both directions)
-    session["counter"] += 1
+    #session["counter"] += 1
 
   end
 
@@ -150,10 +150,9 @@ class NotificationsController < ApplicationController
 
         # if negative response
         elsif out_array.include?(message_array[0])
-          current_invite = Invitation.find_by(friend_id: friend_id, event_id: event_id)
           # persist reply as 'no'
-          current_invite.reply = 'no'
-          current_invite.save
+          active_invite.reply = 'no'
+          active_invite.save
           output = "Sorry to miss you #{name}. Maybe next time."
           active_event = Event.find(@event_id)
           # increment tally of total 'no' replies
