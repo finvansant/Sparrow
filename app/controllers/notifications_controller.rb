@@ -11,20 +11,25 @@ class NotificationsController < ApplicationController
     # establish Twilio REST Client with proper credentials
     client = Twilio::REST::Client.new ENV['TWILIO_ACCOUNT_SID'], ENV['TWILIO_AUTH_TOKEN']
 
-        from = ENV['TEXTIGO_PHONE']
-        select_friends = Group.find(params[:id]).friends
-        # send SMS from Twilio phone number to each friend in group
-        select_friends.each do |friend|
-          client.account.messages.create(
-            :from => from,
-            :to => friend.phone,
-            :body => "Hey #{friend.name}, Hackattack at 6PM. Bring Computer!" # add form logic for this text body
-          )
+    from = ENV['TEXTIGO_PHONE']
+    # Set group, friends, and message body variables from params
+    @group = Group.find(params[:id])
+    @select_friends = @group.friends
+    @message_body = params[:body]
+    # Create new event and set host to current user
+    event = Event.create(name: @message_body, host: current_user.id, status: 'active')
+    
+    # Create invitation record and send SMS from Twilio phone number to each friend in group
+    @select_friends.each do |friend|
+      invite = Invitation.create(friend_id: friend.id, event_id: event.id)
+      client.account.messages.create(
+        :from => from,
+        :to => friend.phone,
+        :body => "Hey #{friend.name},\n#{@message_body}" # add form logic for this text body
+      )
     end
-    # Need to add Event.create here (also need to add a form field for event create)
-    # Event.create(name: @message_body, host: @user.id, guests: {}, status: 'active')
-
-    redirect_to root_url
+      
+    redirect_to root_url, notice: "Message sent to '#{@group}' group."
   end
 
 
