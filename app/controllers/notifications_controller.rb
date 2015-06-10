@@ -47,17 +47,20 @@ class NotificationsController < ApplicationController
       # find first matching friend id of last invitation that matches phone number
       @active_invite = Invitation.find_matching_invitation(friend_ids).first.last
       # assign instance variables for use in other methods
-      @friend_id = @active_invite.friend_id
-      @event_id = @active_invite.event_id
 
       # if invite is active, manage reply logic
       if @active_invite
+        @friend_id = @active_invite.friend_id
+        @event_id = @active_invite.event_id
+
         if @active_invite.reply
           output = "Sorry, but you've already responded to this invite."
         else
           session['person_type'] = 'guest'
           output = process_guest(@body, @phone_number, @active_invite)
         end
+      else
+        output = "Sorry, but event you are looking for must already be closed."
       end
 
     # if you are sending a blast text, you are probably a user
@@ -143,7 +146,6 @@ class NotificationsController < ApplicationController
           host_message = "New Yes RSVP from #{name}. Yes: #{active_event.yes_total} No: #{active_event.no_total}"
           # see send_host method below
           send_host(host_message, active_event.host)
-
           # if event is closed, send summary of people attending
           if active_event.close_event?
             names = active_event.attendee_names

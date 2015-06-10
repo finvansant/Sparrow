@@ -48,8 +48,9 @@ class Event < ActiveRecord::Base
 
   # if event has necessary number of positive replies, close event and return as boolean
   def close_event?
-    if self.yes_total >= self.total_invited
+    if self.yes_total == self.total_invited
       self.status = 'inactive'
+      self.save
       return true
     else
       return false

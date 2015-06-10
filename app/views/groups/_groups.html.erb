@@ -1,4 +1,3 @@
-
 <ul>
   <% @groups.each do |group| %>
     <li><%= link_to group.name, group_path(group) %> - <%= link_to "Edit", edit_group_path(group) %> | <%= link_to "Delete", group_path(group), method: :delete %> | <%= link_to "Send to Group", notifications_desktop_send_path(group), method: :post %></li>
