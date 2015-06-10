@@ -52,8 +52,12 @@ class NotificationsController < ApplicationController
 
       # if invite is active, manage reply logic
       if @active_invite
+        if @active_invite.reply
+          output = "Sorry, but you've already responded to this invite."
+        else
           session['person_type'] = 'guest'
           output = process_guest(@body, @phone_number, @active_invite)
+        end
       end
 
     # if you are sending a blast text, you are probably a user
