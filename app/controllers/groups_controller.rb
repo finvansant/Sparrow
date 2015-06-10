@@ -2,7 +2,7 @@ class GroupsController < ApplicationController
   before_action :authenticate_user!
 
   def index
-    @groups = current_user.groups
+    @groups = user_groups
   end
 
   def new
@@ -11,6 +11,9 @@ class GroupsController < ApplicationController
 
   def show
     @group = Group.find(params[:id])
+    unless show?
+      redirect_to root_url, notice: "Sorry, that action is not allowed."
+    end
   end
 
   def create
@@ -20,6 +23,9 @@ class GroupsController < ApplicationController
 
   def edit
     @group = Group.find(params[:id])
+    unless show?
+      redirect_to root_url, notice: "Sorry, that action is not allowed."
+    end
   end
 
   def update
@@ -36,6 +42,18 @@ class GroupsController < ApplicationController
   end
 
   private
+
+  def show?
+    if user_groups.include?(@group)
+      true
+    else
+      false
+    end
+  end
+
+  def user_groups
+    groups = current_user.groups
+  end
 
   def group_params
      params.require(:group).permit(:name, :user_id, friend_ids: [])

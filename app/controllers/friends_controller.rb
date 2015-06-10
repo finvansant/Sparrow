@@ -2,7 +2,7 @@ class FriendsController < ApplicationController
   before_action :authenticate_user!
 
   def index
-    @friends = current_user.friends
+    @friends = user_friends
   end
 
   def new
@@ -11,6 +11,9 @@ class FriendsController < ApplicationController
 
   def show
     @friend = Friend.find(params[:id])
+    unless show?
+      redirect_to root_url, notice: "Sorry, that action is not allowed."
+    end 
   end
 
   def create
@@ -24,6 +27,9 @@ class FriendsController < ApplicationController
 
   def edit
     @friend = Friend.find(params[:id])
+    unless show?
+      redirect_to root_url, notice: "Sorry, that action is not allowed."
+    end 
   end
 
   def update
@@ -39,6 +45,18 @@ class FriendsController < ApplicationController
   end
 
   private
+
+  def show?
+    if user_friends.include?(@friend)
+      true
+    else
+      false
+    end
+  end
+
+  def user_friends
+    friends = current_user.friends
+  end
 
   def friend_params
      params.require(:friend).permit(:name, :phone, :user_id)
