@@ -8,57 +8,158 @@ body {
   background-size:cover;
 }
 
-form#new_group {
-  margin-top: 10px;
+#body_container {
+
 
 }
 
-form#new_friend {
-  margin-top: 10px;
+
+//// LANDING PAGE \\\\
+
+// TITLE
+
+h1#landing_page_title {
+  text-align: center;
+  margin-top: 4.25em;
+  font-size: 5em;
+  color: white;
+  opacity: 0.9;
+}
+
+h2#landing_page_tagline {
+  text-align: center;
+  color: white;
+  font-style: italic;
+               
+}
+
+
+//// BOARD \\\\
+
+// TITLE
+
+h1#board_title {
+  color: white;
+  margin-bottom: 30px;
 
 }
+
+a.navbar-brand {
+  padding-right: -30px;
+}
+
+#sparrow_icon {
+  margin-top: -26px;
+  margin-left: 70px;
+  margin-bottom: 10px;
+  opacity: 0.5;
+}
+
+.alert { 
+  margin-bottom: 0px;
+}
+
+// CREATE BUTTONS
 
 #new_group_hidden { 
-  color: white;
+  color: #F8F8F8;
+  text-shadow: 0px 0px 3px #000;
   margin: 10px 0 10px;
+
+
+  input[type=text] {
+    margin-left: 5px;
+    color: black;
+  }
   input[type=checkbox] {
     margin-left: 10px;
     margin-right: 5px;
   }
   input[type=submit] {
+    margin-left: 10px;
     color: black; 
   }
+}
+
+a.btn.btn-lg {
+  color: #ccc;
+  background-color: transparent;
+  border-color: #ccc;
 }
 
 #new_friend_hidden {
-  color: white;
+  color: #F8F8F8;
+  text-shadow: 0px 0px 3px #000;
+  margin: 10px 0 10px;
+
   input[type=submit] {
+    margin-left: 10px;
     color: black; 
+  }
+  input[type=text] {
+    margin-right: 5px;
+    margin-left: 5px;
+    color: black;
   }
 }
 
-h1#basecamp_title {
-  color: white;
+// GROUP LIST
 
+#group_column {
+  overflow: hidden;
+  /*outline: solid;*/
+  outline-color: black;
+
+/*  width: 47%;*/
 }
 
 h3#groups_title {
-  color: gray;
+  color: #F8F8F8;
+}
+
+#group_list {
+  color: black;
+}
+
+#group_block {
+  background-color: white;
+  opacity: 0.7;
+  border-radius: 7px;
+  
+  a {
+    color: #297CCF;
+  }
+}
+
+// FRIEND LIST 
+
+#friend_column {
+  overflow: hidden;
+  /*outline: solid;*/
+  outline-color: black;
+
+  /*width: 47%;*/
+
 }
 
 h3#friends_title {
-  color: gray;
-}
-
-
-#group_list {
-  color: white;
-
+  color: #F8F8F8;
 }
 
 #friend_list {
-  color: white;
+  color: black;
 }
+
+#friend_block {
+  background-color: white;
+  opacity: 0.7;
+  border-radius: 7px;
+
+  a {
+    color: #297CCF;
+  }
+}
+
 
 
 

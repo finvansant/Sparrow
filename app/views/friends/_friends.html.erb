@@ -1,5 +1,9 @@
 <ul>
   <% @friends.each do |friend| %>
+    <div id="friend_block">
     <li id="friend_list_item"><%= link_to friend.name, friend_path(friend) %>: <%= friend.phone %> - <%= link_to "Edit", edit_friend_path(friend) %> | <%= link_to "Delete", friend_path(friend), method: :delete %></li>
+    
+    </div>
+
   <% end %>
 </ul>

@@ -16,7 +16,7 @@ class FriendsController < ApplicationController
   def create
     @friend = Friend.create(friend_params)
     if @friend.save
-      redirect_to friends_path
+      redirect_to user_path(current_user)
     else
       render "new"
     end
@@ -32,7 +32,7 @@ class FriendsController < ApplicationController
   def destroy
     @friend = Friend.find(params[:id])
     @friend.destroy
-    redirect_to friends_path
+    redirect_to user_path(current_user)
   end
 
   private

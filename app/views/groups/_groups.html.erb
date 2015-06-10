@@ -1,6 +1,20 @@
-
 <ul>
+  <% counter = 0 %>
+
   <% @groups.each do |group| %>
-    <li><%= link_to group.name, group_path(group) %> - <%= link_to "Edit", edit_group_path(group) %> | <%= link_to "Delete", group_path(group), method: :delete %> | <%= link_to "Send to Group", notifications_desktop_send_path(group), method: :post %></li>
+
+    <div id="group_block">
+
+     <li> <%= link_to group.name, group_path(group) 
+     %> - <%= link_to "Edit", edit_group_path(group), remote: true
+     %> | <%= link_to "Delete", group_path(group), method: :delete 
+     %> | <%= link_to "SMS Body", user_path(current_user) 
+     %> | <%= link_to "Send a sparrow!", notifications_desktop_send_path(group), method: :post %></li>
+
+     <div id="group_edit_field_<%=  group.id %>" style= "display:none;"></div>
+     <% counter += 1 %>
+    </div>
+
   <% end %>
+
 </ul>
