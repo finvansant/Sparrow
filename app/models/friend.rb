@@ -26,19 +26,13 @@ class Friend < ActiveRecord::Base
 
   def self.get_id_from_number(number)
     friend = self.find_by(phone: number)
-    friend.id 
-  end 
+    friend.id
+  end
 
+  # get all friend IDs corresponding to phone number from all groups
   def self.get_all_ids_from_number(number)
     friends = self.all.select { |friend| friend.phone == number }
     friends.map { |friend| friend.id }
-  end 
-
- 
-
-
-
-
-
+  end
 
 end
