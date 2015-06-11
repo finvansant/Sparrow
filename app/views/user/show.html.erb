@@ -4,7 +4,7 @@
   
   <div id= "group_column" class="col-xs-6">
     
-    <%= link_to "Create Group +", new_group_path, class: "btn btn-lg", remote: true %>
+    <%= link_to "Create Group +", new_group_path, id: "create_group_btn", class: "btn btn-lg", remote: true %>
     <div id="new_group_hidden" style="display:none;"></div>
 
     <h3 id="groups_title">My Groups</h3>
@@ -17,7 +17,7 @@
 
   <div id= "friend_column" class="col-xs-6">
     
-    <%= link_to "Create Friend +", new_friend_path, class: "btn btn-lg", remote: true %>
+    <%= link_to "Create Friend +", new_friend_path, id: "create_friend_btn", class: "btn btn-lg", remote: true %>
     <div id="new_friend_hidden" style="display:none;"></div>
 
     <h3 id="friends_title">My Friends</h3>
