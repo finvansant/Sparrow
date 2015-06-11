@@ -4,7 +4,7 @@ Sparrow
 
 Sparrow allows you to launch, manage, and structure any social event - using a single text message.
 
-![alt tag](https://raw.github.com/finvansant/Textigo_app/master/app/assets/images/github_file/landing_page_logo.png)
+![alt tag](https://raw.github.com/finvansant/Textigo_app/master/app/assets/images/github_file/landing_page.png)
 ![alt tag](https://raw.github.com/finvansant/Textigo_app/master/app/assets/images/github_file/landing_page.png)
 ![alt tag](https://raw.github.com/finvansant/Textigo_app/master/app/assets/images/github_file/board.png)
 
