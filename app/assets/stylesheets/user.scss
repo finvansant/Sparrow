@@ -13,6 +13,12 @@ body {
 
 }
 
+.field {
+  color: white;
+  input[type=text], input[type=email], input[type=password] {
+    color: black;
+  }
+}
 
 //// LANDING PAGE \\\\
 
