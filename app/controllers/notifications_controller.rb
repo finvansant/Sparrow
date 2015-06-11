@@ -75,6 +75,11 @@ class NotificationsController < ApplicationController
 
         output = "Message sent to '#{message_array[0]}' group."
         event = Event.create(name: @message_body, host: @user.id, status: 'active')
+        if @num_invited
+          event.total_invited = @num_invited
+          event.save
+        end
+
         # create active event and invitations for each friend
         @select_friends.each { |friend| Invitation.create(friend_id: friend.id, event_id: event.id)}
 
