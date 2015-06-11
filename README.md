@@ -15,6 +15,10 @@ Bullet point some of the key features of your app here.
 
 ## Dependencies
 
+* jquery-ui-rails gem
+* twilio-ruby gem
+* devise gem
+
 ## Next
 
 
