@@ -10,8 +10,6 @@ Sparrow allows you to launch, manage, and structure any social event - using a s
 
 ## Background
 
-Why did you want to make this app? What was your development process
-like?
 
 ## Features
 
