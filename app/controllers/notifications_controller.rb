@@ -69,7 +69,6 @@ class NotificationsController < ApplicationController
       # first word of SMS should be the name of the group to which you are sending the message
       @message_body = process_host_body(@body)
       @group = @user.groups.find_by(name: @group_name)
-      binding.pry
       if @group
         # send the rest of the message (without the first word) to all friends in group
         @select_friends = @group.friends
