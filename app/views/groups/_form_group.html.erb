@@ -6,10 +6,13 @@
 </ul>
 <% end %>
 
+<div id="group_checkboxes_names">
 <%= form_for @group do |f| %>
-  <%= f.label :name %>
+  <%= f.label :name, 'Group Name' %>
   <%= f.text_field :name %>
-  <%= f.collection_check_boxes :friend_ids, current_user.friends, :id, :name %>
+ <!--  <%= f.collection_check_boxes :friend_ids, current_user.friends, :id, :name %> -->
   <%= f.hidden_field :user_id, value: current_user.id %>
   <%= f.submit %>
 <% end %>
+</div>
+

@@ -1,5 +1,6 @@
 class GroupsController < ApplicationController
   before_action :authenticate_user!
+  respond_to :html, :js
 
   def index
     @groups = user_groups
@@ -19,11 +20,12 @@ class GroupsController < ApplicationController
   def create
     @group = Group.create(group_params)
     if @group.save
-      redirect_to groups_path, notice: "Group created."
+      redirect_to user_path(current_user), notice: "Group created."
     else
       # something
       render "new"
     end
+
   end
 
   def edit
@@ -36,7 +38,7 @@ class GroupsController < ApplicationController
   def update
     @group = Group.find(params[:id])
     if @group.update(group_params)
-      redirect_to groups_path, notice: "Group updated."
+      redirect_to user_path(current_user), notice: "Group updated."
     else
       render "edit"  
     end
@@ -45,7 +47,7 @@ class GroupsController < ApplicationController
   def destroy
     @group = Group.find(params[:id])
     @group.destroy
-    redirect_to groups_path
+    redirect_to user_path(current_user)
   end
 
   private

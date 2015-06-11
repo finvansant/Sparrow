@@ -1,6 +1,7 @@
 class FriendsController < ApplicationController
   before_action :authenticate_user!
-
+  respond_to :html, :js
+  
   def index
     @friends = user_friends
   end
@@ -19,7 +20,7 @@ class FriendsController < ApplicationController
   def create
     @friend = Friend.create(friend_params)
     if @friend.save
-      redirect_to friends_path
+      redirect_to user_path(current_user)
     else
       render "new"
     end
@@ -35,13 +36,13 @@ class FriendsController < ApplicationController
   def update
     @friend = Friend.find(params[:id])
     @friend.update(friend_params) 
-    redirect_to friends_path
+    redirect_to user_path(current_user)
   end
 
   def destroy
     @friend = Friend.find(params[:id])
     @friend.destroy
-    redirect_to friends_path
+    redirect_to user_path(current_user)
   end
 
   private

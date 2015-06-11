@@ -87,6 +87,7 @@ class NotificationsController < ApplicationController
 
     else
       output = "Hmm... Try creating a new event @ Textigo.com. No active invites or groups associated with this number."
+
     end
 
     # automated reply; lets user know whether their action succeeded or failed

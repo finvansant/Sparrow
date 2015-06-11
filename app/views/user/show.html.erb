@@ -1,10 +1,30 @@
-<h1>My Account</h1>
+<h1 id="board_title">Board</h1>
 
-<%= link_to "Create Group", new_group_path, class: "btn btn-default" %>
-<%= link_to "Create Friend", new_friend_path, class: "btn btn-default" %>
+<div class= "row">
+  
+  <div id= "group_column" class="col-xs-6">
+    
+    <%= link_to "Create Group +", new_group_path, class: "btn btn-lg", remote: true %>
+    <div id="new_group_hidden" style="display:none;"></div>
 
-<h3>My Groups</h3>
-<%= render "groups/groups" %>
+    <h3 id="groups_title">My Groups</h3>
+    <div id="group_list">
+    <%= render "groups/groups" %>
+    </div>
+  
+  </div>
 
-<h3>My Friends</h3>
-<%= render "friends/friends" %>
+
+  <div id= "friend_column" class="col-xs-6">
+    
+    <%= link_to "Create Friend +", new_friend_path, class: "btn btn-lg", remote: true %>
+    <div id="new_friend_hidden" style="display:none;"></div>
+
+    <h3 id="friends_title">My Friends</h3>
+    <div id="friend_list">
+    <%= render "friends/friends" %>
+    </div>
+  
+  </div>
+
+</div>

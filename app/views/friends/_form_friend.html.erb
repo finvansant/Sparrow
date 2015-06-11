@@ -7,10 +7,12 @@
 <% end %>
 
 <%= form_for @friend do |f| %>
-  <%= f.label :name %>
+  <%= f.label :name, 'Friend Name' %>
   <%= f.text_field :name %>
+  <br/>
   <%= f.label :phone %>
   <%= f.text_field :phone %>
   <%= f.hidden_field :user_id, value: current_user.id %>
+  <br/>
   <%= f.submit %>
 <% end %>
