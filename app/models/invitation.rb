@@ -22,7 +22,7 @@ class Invitation < ActiveRecord::Base
       # find all invitations associated with each friend ID
       all_active_invites.select do |invite|
         invite.friend_id == friend_id
-      end
+      end.last
     end
   end
 
