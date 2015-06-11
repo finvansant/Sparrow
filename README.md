@@ -1,40 +1,36 @@
-# Textigo App
 
-## Description
+Sparrow
+========
 
-Add a short description of your app.
+Sparrow allows you to launch, manage, and structure any social event - with a single text message.
 
-## Screenshots
+![alt tag](https://raw.github.com/finvansant/Textigo_app/master/app/assets/images/github_file/landing_page.jpg)
 
-Add some spiffy screenshots of your app here.
+![alt tag](https://raw.github.com/finvansant/Textigo_app/master/app/assets/images/github_file/board.jpg)
 
-## Background
-
-Why did you want to make this app? What was your development process
-like?
 
 ## Features
 
 Bullet point some of the key features of your app here.
 
-## Usage
+## Dependencies
 
-How do users use your app?
+* jquery-ui-rails gem
+* twilio-ruby gem
+* devise gem
 
-## Development/Contribution
+## Next
 
-Explain how people can contribute to your app. How should they write tests?
-Any things in particular you'd like to see in pull requests?
 
-## Future
 
-What features are you currently working on? Only mention things that you
-actually are implementing. No pie-in-the-sky-never-gonna-happen stuff.
+## Authors
 
-## Author
+Built by Chad Ruble, Findlay Parke, Julian Taub, and Ian Valentine in June 2015.
 
-Link to your blog, twitter, etc!
+## Credit
+
+
 
 ## License
 
-Textigo App is MIT Licensed. See LICENSE for details.
+Sparrow is MIT Licensed. See LICENSE for details.
