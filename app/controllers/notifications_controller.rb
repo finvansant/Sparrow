@@ -17,7 +17,7 @@ class NotificationsController < ApplicationController
     @select_friends = @group.friends
     @message_body = @group.body
     # Create new event and set host to current user
-    event = Event.create(name: @message_body, host: current_user.id, status: 'active')
+    event = Event.create(name: @message_body, host: current_user.id, status: 'active', expires: Time.now+(4*60*60)
     
     # Create invitation record and send SMS from Twilio phone number to each friend in group
     @select_friends.each do |friend|
@@ -74,7 +74,7 @@ class NotificationsController < ApplicationController
         @select_friends = @group.friends
 
         output = "Message sent to '#{@group.name}' group."
-        event = Event.create(name: @message_body, host: @user.id, status: 'active')
+        event = Event.create(name: @message_body, host: @user.id, status: 'active', expires: Time.now+(4*60*60))
         if @num_invited
           event.total_invited = @num_invited
           event.save

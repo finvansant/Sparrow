@@ -6,6 +6,7 @@ class Event < ActiveRecord::Base
 
   # find all active events
   def self.all_active
+    self.expire_the_expired
     Event.all.where(status: 'active')
   end
 
@@ -63,5 +64,18 @@ class Event < ActiveRecord::Base
     self.invitations.each {|i| attendee_ids << i.friend_id if i.reply == 'yes'}
     attendee_ids.map {|id| Friend.find(id).name }
   end
+
+  # run an expiration check (for now, we can call this in all_active)
+  # this runs wen we run all_active, but when do we do that? 
+
+  def self.expire_the_expired
+    events = Event.all_active
+    events.each do |event|
+        if event.expires < Time.now
+          event.status = 'expired'
+          event.save 
+        end 
+    end 
+  end 
 
 end

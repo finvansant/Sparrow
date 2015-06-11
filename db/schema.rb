@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150611185233) do
+ActiveRecord::Schema.define(version: 20150611221250) do
 
   create_table "events", force: :cascade do |t|
     t.string   "name"
@@ -22,6 +22,7 @@ ActiveRecord::Schema.define(version: 20150611185233) do
     t.integer  "yes_total",     default: 0
     t.integer  "no_total",      default: 0
     t.integer  "total_invited", default: 1
+    t.datetime "expires"
   end
 
   create_table "friends", force: :cascade do |t|
