@@ -27,6 +27,9 @@ class FriendsController < ApplicationController
   end
 
   def update
+    @friend = Friend.find(params[:id])
+    @friend.update(friend_params) 
+    redirect_to user_path(current_user)
   end
 
   def destroy

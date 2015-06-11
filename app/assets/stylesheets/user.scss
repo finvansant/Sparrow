@@ -20,19 +20,29 @@ body {
 
 h1#landing_page_title {
   text-align: center;
-  margin-top: 4.25em;
+  margin-top: 4.2em;
   font-size: 5em;
   color: white;
   opacity: 0.9;
 }
 
-h2#landing_page_tagline {
+h3#landing_page_tagline {
   text-align: center;
   color: white;
-  font-style: italic;
+/*  font-style: italic;*/
+  display: inline;
+  margin-left: 36%;
+  margin-right: auto;
+
                
 }
 
+#birdhouse {
+  margin-left: 10px;
+  text-align: center;
+  display: inline;
+
+}
 
 //// BOARD \\\\
 
@@ -59,7 +69,11 @@ a.navbar-brand {
   margin-bottom: 0px;
 }
 
-// CREATE BUTTONS
+
+
+// GROUPS
+
+// CREATE BUTTON
 
 #new_group_hidden { 
   color: #F8F8F8;
@@ -87,10 +101,79 @@ a.btn.btn-lg {
   border-color: #ccc;
 }
 
+// GROUP COLUMN
+
+#group_column {
+  overflow: hidden;
+  /*outline: solid;*/
+  /*outline-color: black;*/
+
+/*  width: 47%;*/
+}
+
+h3#groups_title {
+  color: #F8F8F8;
+  margin-left: 7em;
+  margin-bottom: 1em;
+}
+
+#group_list {
+  color: black;
+  ul {
+    margin: auto;
+  }
+
+  li {
+    list-style-type: none;
+  }
+}
+
+
+#group_block {
+  text-align: center;
+  margin-bottom: 1em;
+  background-color: white;
+  opacity: 0.7;
+  border-radius: 7px;
+  width: 50%;
+  margin-left: auto;
+  margin-right: auto;
+
+  
+  li#sparrow_send {
+    a {
+      color: #297CCF;
+      
+    }
+  }
+
+  a {
+    color: #297CCF;
+
+  }
+}
+
+#group_name {
+  font-size: 1.25em;
+}
+
+img.sparrow {
+  margin-left: 6px;
+  margin-bottom: 5px;
+
+
+}
+
+// FRIENDS
+
+// CREATE BUTTON
+
 #new_friend_hidden {
+  text-align: left;
   color: #F8F8F8;
   text-shadow: 0px 0px 3px #000;
   margin: 10px 0 10px;
+  width: 100%;
 
   input[type=submit] {
     margin-left: 10px;
@@ -101,62 +184,64 @@ a.btn.btn-lg {
     margin-left: 5px;
     color: black;
   }
-}
-
-// GROUP LIST
-
-#group_column {
-  overflow: hidden;
-  /*outline: solid;*/
-  outline-color: black;
-
-/*  width: 47%;*/
-}
-
-h3#groups_title {
-  color: #F8F8F8;
-}
-
-#group_list {
-  color: black;
-}
-
-#group_block {
-  background-color: white;
-  opacity: 0.7;
-  border-radius: 7px;
-  
-  a {
-    color: #297CCF;
+  label {
+    margin-left: 1em;
+    margin-bottom: 0.5em;
   }
 }
 
-// FRIEND LIST 
+// FRIEND COLUMN
 
 #friend_column {
   overflow: hidden;
-  /*outline: solid;*/
-  outline-color: black;
-
-  /*width: 47%;*/
+  //outline: solid;
+  //outline-color: black;
 
 }
 
 h3#friends_title {
   color: #F8F8F8;
+  margin-left: 4.3em;
+  margin-bottom: 1em;
 }
 
 #friend_list {
   color: black;
+
+  ul {
+    padding-left: 0px;
+  }
+  li {
+    list-style-type: none;
+  }
 }
 
 #friend_block {
+  text-align: center;
   background-color: white;
   opacity: 0.7;
   border-radius: 7px;
+  width: 60%;
+  margin-bottom: 1em;
+  margin-left: auto;
+  margin-right: auto;
+
+  #friend_name_phone{
+    font-size: 1.15em;
+  }
+
+  input#friend_name {
+    width: 40%;
+  }
+
+  input#friend_phone {
+    width: 40%;
+
+  }
 
   a {
     color: #297CCF;
+
   }
 }
 
