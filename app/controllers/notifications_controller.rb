@@ -15,7 +15,7 @@ class NotificationsController < ApplicationController
     # Set group, friends, and message body variables from params
     @group = Group.find(params[:id])
     @select_friends = @group.friends
-    @message_body = params[:body]
+    @message_body = @group.body
     # Create new event and set host to current user
     event = Event.create(name: @message_body, host: current_user.id, status: 'active')
     
