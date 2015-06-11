@@ -9,30 +9,23 @@ Sparrow allows you to launch, manage, and structure any social event - with just
 ![alt tag](https://raw.github.com/finvansant/Textigo_app/master/app/assets/images/github_file/board.jpg)
 
 
-## Background
-
-
 ## Features
 
 Bullet point some of the key features of your app here.
 
-## Usage
+## Dependencies
 
-How do users use your app?
+## Next
 
-## Development/Contribution
 
-Explain how people can contribute to your app. How should they write tests?
-Any things in particular you'd like to see in pull requests?
 
-## Future
-
-What features are you currently working on? Only mention things that you
-actually are implementing. No pie-in-the-sky-never-gonna-happen stuff.
-
-## Author
+## Authors
 
 Link to your blog, twitter, etc!
+
+## Credit
+
+
 
 ## License
 
