@@ -45,7 +45,8 @@ class NotificationsController < ApplicationController
       # get all friend IDs corresponding to phone number from all groups
       friend_ids = Friend.get_all_ids_from_number(@phone_number)
       # find first matching friend id of last invitation that matches phone number
-      @active_invite = Invitation.find_matching_invitation(friend_ids).first.last
+      @active_invite = Invitation.find_matching_invitation(friend_ids).last
+
       # assign instance variables for use in other methods
 
       # if invite is active, manage reply logic
@@ -56,7 +57,6 @@ class NotificationsController < ApplicationController
         if @active_invite.reply
           output = "Sorry, but you've already responded to this invite."
         else
-          session['person_type'] = 'guest'
           output = process_guest(@body, @phone_number, @active_invite)
         end
       else
@@ -73,7 +73,7 @@ class NotificationsController < ApplicationController
         # send the rest of the message (without the first word) to all friends in group
         @select_friends = @group.friends
 
-        output = "Message sent to '#{message_array[0]}' group."
+        output = "Message sent to '#{@group.name}' group."
         event = Event.create(name: @message_body, host: @user.id, status: 'active')
         if @num_invited
           event.total_invited = @num_invited
@@ -86,7 +86,7 @@ class NotificationsController < ApplicationController
         # see send_group method below
         send_group(@message_body, @select_friends, @user.name)
       else
-        output = "#{message_array[0]} is not a group. please make one"
+        output = "You have entered an invalid group. Please create one."
       end
 
     else
