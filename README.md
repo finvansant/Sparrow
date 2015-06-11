@@ -8,10 +8,9 @@ Sparrow allows you to launch, manage, and structure any social event - using a s
 ![alt tag](https://raw.github.com/finvansant/Textigo_app/master/app/assets/images/github_file/landing_page.jpg)
 ![alt tag](https://raw.github.com/finvansant/Textigo_app/master/app/assets/images/github_file/board.jpg)
 
+
 ## Background
 
-Why did you want to make this app? What was your development process
-like?
 
 ## Features
 
