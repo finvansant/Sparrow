@@ -29,4 +29,4 @@ Built by Chad Ruble, Findlay Parke, Julian Taub, and Ian Valentine in June 2015.
 
 ## License
 
-Textigo App is MIT Licensed. See LICENSE for details.
+Sparrow is MIT Licensed. See LICENSE for details.
