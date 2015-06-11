@@ -1,4 +1,4 @@
-# Textigo App
+# SparrowTxt
 
 ## Description
 
