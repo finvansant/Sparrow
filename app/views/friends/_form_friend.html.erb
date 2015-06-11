@@ -1,3 +1,11 @@
+<% if @friend.errors.any? %>
+<ul>
+ <% @friend.errors.full_messages.each do |error| %>
+   <li><%= error %></li>
+ <% end %>
+</ul>
+<% end %>
+
 <%= form_for @friend do |f| %>
   <%= f.label :name %>
   <%= f.text_field :name %>

@@ -11,20 +11,25 @@ class NotificationsController < ApplicationController
     # establish Twilio REST Client with proper credentials
     client = Twilio::REST::Client.new ENV['TWILIO_ACCOUNT_SID'], ENV['TWILIO_AUTH_TOKEN']
 
-        from = ENV['TEXTIGO_PHONE']
-        select_friends = Group.find(params[:id]).friends
-        # send SMS from Twilio phone number to each friend in group
-        select_friends.each do |friend|
-          client.account.messages.create(
-            :from => from,
-            :to => friend.phone,
-            :body => "Hey #{friend.name}, Hackattack at 6PM. Bring Computer!" # add form logic for this text body
-          )
+    from = ENV['TEXTIGO_PHONE']
+    # Set group, friends, and message body variables from params
+    @group = Group.find(params[:id])
+    @select_friends = @group.friends
+    @message_body = params[:body]
+    # Create new event and set host to current user
+    event = Event.create(name: @message_body, host: current_user.id, status: 'active')
+    
+    # Create invitation record and send SMS from Twilio phone number to each friend in group
+    @select_friends.each do |friend|
+      invite = Invitation.create(friend_id: friend.id, event_id: event.id)
+      client.account.messages.create(
+        :from => from,
+        :to => friend.phone,
+        :body => "From #{current_user.name}:\nHey #{friend.name}, #{@message_body}, [In] or [Out]?" # add form logic for this text body
+      )
     end
-    # Need to add Event.create here (also need to add a form field for event create)
-    # Event.create(name: @message_body, host: @user.id, guests: {}, status: 'active')
-
-    redirect_to root_url
+      
+    redirect_to root_url, notice: "Message sent to '#{@group.name.titleize}' group."
   end
 
 
@@ -42,13 +47,20 @@ class NotificationsController < ApplicationController
       # find first matching friend id of last invitation that matches phone number
       @active_invite = Invitation.find_matching_invitation(friend_ids).first.last
       # assign instance variables for use in other methods
-      @friend_id = @active_invite.friend_id
-      @event_id = @active_invite.event_id
 
       # if invite is active, manage reply logic
       if @active_invite
+        @friend_id = @active_invite.friend_id
+        @event_id = @active_invite.event_id
+
+        if @active_invite.reply
+          output = "Sorry, but you've already responded to this invite."
+        else
           session['person_type'] = 'guest'
           output = process_guest(@body, @phone_number, @active_invite)
+        end
+      else
+        output = "Sorry, but event you are looking for must already be closed."
       end
 
     # if you are sending a blast text, you are probably a user
@@ -80,7 +92,7 @@ class NotificationsController < ApplicationController
     # automated reply; lets user know whether their action succeeded or failed
     respond(output)
     # increment session counter so that we can keep track of replies (counts messages in both directions)
-    session["counter"] += 1
+    #session["counter"] += 1
 
   end
 
@@ -134,7 +146,6 @@ class NotificationsController < ApplicationController
           host_message = "New Yes RSVP from #{name}. Yes: #{active_event.yes_total} No: #{active_event.no_total}"
           # see send_host method below
           send_host(host_message, active_event.host)
-
           # if event is closed, send summary of people attending
           if active_event.close_event?
             names = active_event.attendee_names
@@ -145,10 +156,9 @@ class NotificationsController < ApplicationController
 
         # if negative response
         elsif out_array.include?(message_array[0])
-          current_invite = Invitation.find_by(friend_id: friend_id, event_id: event_id)
           # persist reply as 'no'
-          current_invite.reply = 'no'
-          current_invite.save
+          active_invite.reply = 'no'
+          active_invite.save
           output = "Sorry to miss you #{name}. Maybe next time."
           active_event = Event.find(@event_id)
           # increment tally of total 'no' replies
