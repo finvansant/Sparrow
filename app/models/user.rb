@@ -4,12 +4,12 @@ class User < ActiveRecord::Base
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :trackable, :validatable
 
-  before_save :normalize_phone
+  before_validation :normalize_phone
 
   has_many :groups
   has_many :friends
 
-  validates :phone, presence: true
+  validates :phone, presence: true, uniqueness: true
   
  
   # formats phone entry to E.123
