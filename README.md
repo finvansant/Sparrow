@@ -21,7 +21,7 @@ Bullet point some of the key features of your app here.
 
 ## Authors
 
-Link to your blog, twitter, etc!
+Built by Chad Ruble, Findlay Parke, Julian Taub, and Ian Valentine in June 2015.
 
 ## Credit
 
