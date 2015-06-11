@@ -75,6 +75,13 @@ a.navbar-brand {
 
 // CREATE BUTTON
 
+a#create_group_btn.btn-lg {
+  color: #ccc;
+  background-color: transparent;
+  border-color: #ccc;
+  margin-left: 4em;
+}
+
 #new_group_hidden { 
   color: #F8F8F8;
   text-shadow: 0px 0px 3px #000;
@@ -95,11 +102,7 @@ a.navbar-brand {
   }
 }
 
-a.btn.btn-lg {
-  color: #ccc;
-  background-color: transparent;
-  border-color: #ccc;
-}
+
 
 // GROUP COLUMN
 
@@ -131,7 +134,7 @@ h3#groups_title {
 
 #group_block {
   text-align: center;
-  margin-bottom: 1em;
+  margin-bottom: 2em;
   background-color: white;
   opacity: 0.7;
   border-radius: 7px;
@@ -167,6 +170,12 @@ img.sparrow {
 // FRIENDS
 
 // CREATE BUTTON
+
+a#create_friend_btn.btn-lg {
+  color: #ccc;
+  background-color: transparent;
+  border-color: #ccc;
+}
 
 #new_friend_hidden {
   text-align: left;
