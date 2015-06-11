@@ -38,7 +38,7 @@ class NotificationsController < ApplicationController
     @phone_number = params[:From]
     @body = params[:Body].downcase
     # split SMS into array of words
-    message_array = @body.split
+    # message_array = @body.split
 
     # if you are sending an SMS in response to a blast text, you are probably a friend in a group
     if Friend.exists?(phone: @phone_number)
@@ -67,10 +67,9 @@ class NotificationsController < ApplicationController
     elsif User.exists?(phone: @phone_number)
       @user = User.find_by(phone: @phone_number)
       # first word of SMS should be the name of the group to which you are sending the message
-      @group = @user.groups.find_by(name: message_array[0])
+      @message_body = process_host_body(@body)
+      @group = @user.groups.find_by(name: @group_name)
       if @group
-        session['person_type'] = 'host'
-        @message_body = message_array[1..-1].join(' ')
         # send the rest of the message (without the first word) to all friends in group
         @select_friends = @group.friends
 
@@ -194,6 +193,26 @@ class NotificationsController < ApplicationController
           :body => output,
         )
 
+    end
+
+    def process_host_body(body)      
+      if body.match(/\@[a-zA-Z0-9]+/)
+        group_sign = body.match(/\@[a-zA-Z0-9]+/)[0] 
+        @group_name = group_sign[1..-1]
+      end
+      if body.match(/\[[\d]+\]/)
+        num_invited_sign = body.match(/\[[\d]+\]/)[0] 
+        @num_invited = num_invited_sign[1..-2].to_i
+      end
+      if body.match(/\#[a-zA-Z]+/)
+        option_sign = body.match(/\#[a-zA-Z]+/)[0] 
+        @option = option_sign[1..-1]
+      end
+      message_array = body.split
+      sanitized_body = message_array.reject do |word| 
+        word == group_sign || word == num_invited_sign || word == option_sign 
+      end
+      sanitized_body.join(' ').capitalize
     end
 
 end
