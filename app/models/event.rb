@@ -72,7 +72,7 @@ class Event < ActiveRecord::Base
     events = Event.all_active
     events.each do |event|
         if event.expires < Time.now
-          event.status = 'expired'
+          event.status = 'inactive'
           event.save 
         end 
     end 

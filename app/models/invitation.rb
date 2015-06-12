@@ -9,6 +9,7 @@ class Invitation < ActiveRecord::Base
 
   # find invitations for all active events
   def self.all_active
+    Event.expire_the_expired
     self.select do |invite|
       invite.event.status == 'active'
     end
