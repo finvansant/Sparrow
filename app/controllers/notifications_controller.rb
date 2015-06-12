@@ -53,7 +53,7 @@ class NotificationsController < ApplicationController
       if @active_invite
         @friend_id = @active_invite.friend_id
         @event_id = @active_invite.event_id
-        binding.pry
+
         if @active_invite.reply
           output = "Sorry, but you've already responded to this invite."
         else
