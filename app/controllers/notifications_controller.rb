@@ -17,7 +17,7 @@ class NotificationsController < ApplicationController
     @select_friends = @group.friends
     @message_body = @group.body
     # Create new event and set host to current user
-    event = Event.create(name: @message_body, host: current_user.id, status: 'active', expires: Time.now+(4*60*60)
+    event = Event.create(name: @message_body, host: current_user.id, status: 'active', expires: Time.now+(4*60*60))
     
     # Create invitation record and send SMS from Twilio phone number to each friend in group
     @select_friends.each do |friend|
@@ -53,7 +53,7 @@ class NotificationsController < ApplicationController
       if @active_invite
         @friend_id = @active_invite.friend_id
         @event_id = @active_invite.event_id
-
+        binding.pry
         if @active_invite.reply
           output = "Sorry, but you've already responded to this invite."
         else
@@ -200,10 +200,11 @@ class NotificationsController < ApplicationController
 
     end
 
-    def process_host_body(body)      
+    def process_host_body(body)  
       if body.match(/\@[a-zA-Z0-9]+/)
         group_sign = body.match(/\@[a-zA-Z0-9]+/)[0] 
         @group_name = group_sign[1..-1]
+
       end
       if body.match(/\[[\d]+\]/)
         num_invited_sign = body.match(/\[[\d]+\]/)[0] 

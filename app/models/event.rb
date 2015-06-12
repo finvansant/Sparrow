@@ -6,7 +6,6 @@ class Event < ActiveRecord::Base
 
   # find all active events
   def self.all_active
-    self.expire_the_expired
     Event.all.where(status: 'active')
   end
 

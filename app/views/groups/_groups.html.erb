@@ -3,7 +3,7 @@
 
     <div id="group_block">
 
-        <li id="group_name"><%= group.name %></li> 
+        <li id="group_name"><%= group.name.capitalize %></li> 
         <li id="group_edit_del_btn"><%= link_to "Edit", edit_group_path(group), remote: true%> | <%= link_to "Delete", group_path(group), method: :delete %></li>
         <div id="group_edit_field_<%= group.id %>" style= "display:none;"></div>
         <li id="sms_body"><%= link_to "SMS Body", edit_group_path(group), remote: true%></li>
